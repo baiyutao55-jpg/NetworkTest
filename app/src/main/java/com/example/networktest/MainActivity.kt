@@ -15,6 +15,7 @@ import kotlin.concurrent.thread
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("Okhttp","---onCreate()----")
         setContentView(R.layout.activity_main)
         val sendRequestBtn=findViewById<Button>(R.id.sendRequestBtn)
         sendRequestBtn.setOnClickListener {
@@ -42,8 +43,8 @@ class MainActivity : AppCompatActivity() {
 
 
 private fun showResponse(response:String){
-
-    Log.d("Okhttp","reponse:$response")
+    Log.d("Okhttp","---Begin response----")
+    Log.d("Okhttp","address Network site  Reponse=:$response")
     runOnUiThread {
         val responseText=findViewById<TextView>(R.id.responseText)
         responseText.text=response
