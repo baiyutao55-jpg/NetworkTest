@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
 private fun showResponse(response:String){
 
-    Log.d("Okhttp","network reponse:$response")
+    Log.d("Okhttp","reponse:$response")
     runOnUiThread {
         val responseText=findViewById<TextView>(R.id.responseText)
         responseText.text=response
