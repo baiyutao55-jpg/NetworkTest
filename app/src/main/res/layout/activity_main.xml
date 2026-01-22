@@ -12,6 +12,14 @@
     android:text="Send Request"
     />
 
+    <Button
+        android:layout_marginTop="20dp"
+        android:id="@+id/Readxml"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Read Http Xml"
+        />
+
 <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent">
