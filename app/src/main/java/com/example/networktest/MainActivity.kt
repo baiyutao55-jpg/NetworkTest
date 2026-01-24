@@ -10,15 +10,16 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.xml.sax.InputSource
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.StringReader
+import javax.xml.parsers.SAXParserFactory
 import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("Okhttp","---onCreate()----")
         setContentView(R.layout.activity_main)
         val sendRequestBtn=findViewById<Button>(R.id.sendRequestBtn)
         sendRequestBtn.setOnClickListener {
@@ -30,6 +31,13 @@ class MainActivity : AppCompatActivity() {
         ReadxmlBtn.setOnClickListener {
             ReadwithOkhttp()
         }
+
+        val ReadSAXxmlBtn=findViewById<Button>(R.id.ReadSAxxml)
+
+        ReadSAXxmlBtn.setOnClickListener {
+            ReadwSAXOkhttp()
+        }
+
     }
 
     private fun sendRequestWithOkHttp(){
@@ -51,12 +59,24 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
+
+private fun showResponse(response:String){
+
+    Log.d("Okhttp","network reponse:$response")
+    runOnUiThread {
+        val responseText=findViewById<TextView>(R.id.responseText)
+        responseText.text=response
+    }
+}
+
+
     private fun ReadwithOkhttp(){
         thread {
             try{
                 val client= OkHttpClient()
                 val request= Request.Builder()
-                    .url("http://192.168.3.242/get_data.xml")
+                    .url("http://192.168.3.11/get_data.xml")
                     .build()
                 val response=client.newCall(request).execute()
                 val responseData=response.body?.string()
@@ -70,14 +90,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-private fun showResponse(response:String){
-    Log.d("Okhttp","---Begin response----")
-    Log.d("Okhttp","address Network site  Reponse=:$response")
-    runOnUiThread {
-        val responseText=findViewById<TextView>(R.id.responseText)
-        responseText.text=response
-    }
-}
 
     private fun parseXMLWithPull(xmlData:String){
         try{
@@ -117,6 +129,39 @@ private fun showResponse(response:String){
         catch (e: Exception){
             e.printStackTrace()
         }
+    }
+
+
+    private fun ReadwSAXOkhttp(){
+        thread {
+            try{
+                val client= OkHttpClient()
+                val request= Request.Builder()
+                    .url("http://192.168.3.11/get_data.xml")
+                    .build()
+                val response=client.newCall(request).execute()
+                val responseData=response.body?.string()
+                if(responseData!=null){
+                    parseXmlWithSAX(responseData)
+                }
+            }
+            catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
+    }
+
+
+
+    private fun parseXmlWithSAX(xmlData:String){
+        try{
+            val factory= SAXParserFactory.newInstance()
+            val xmlRead=factory.newSAXParser().xmlReader
+            val handler= ContentHandler()
+            xmlRead.contentHandler=handler
+            xmlRead.parse(InputSource(StringReader(xmlData)))
+        }
+        catch (e: Exception){e.printStackTrace()}
     }
 
 }
