@@ -57,11 +57,13 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun ReadwithGsonOkhttp(){
+
+
         thread {
             try{
                 val client= OkHttpClient()
                 val request= Request.Builder()
-                    .url("http://192.168.3.11/get_data.json")
+                    .url("http://8.140.53.233/get_data.json")
                     .build()
                 val response=client.newCall(request).execute()
                 val responseData=response.body?.string()
