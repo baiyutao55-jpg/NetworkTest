@@ -41,6 +41,8 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(platform("com.squareup.okhttp3:okhttp-bom:5.3.2"))
     implementation("com.squareup.okhttp3:okhttp")
+    implementation(platform("com.google.code.gson:gson:2.13.2"))
+    implementation("com.google.code.gson:gson")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -29,6 +29,21 @@
         android:text="Read Sax Xml"
         />
 
+    <Button
+        android:layout_marginTop="20dp"
+        android:id="@+id/ReadJsonObject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Read Json Object"
+        />
+    <Button
+        android:layout_marginTop="20dp"
+        android:id="@+id/ReadGsonObject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Read Gson Object"
+        />
+
 <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent">

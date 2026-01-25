@@ -8,14 +8,18 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.json.JSONArray
 import org.xml.sax.InputSource
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.StringReader
 import javax.xml.parsers.SAXParserFactory
 import kotlin.concurrent.thread
+import kotlin.reflect.typeOf
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +42,90 @@ class MainActivity : AppCompatActivity() {
             ReadwSAXOkhttp()
         }
 
+        val readJsonBtn=findViewById<Button>(R.id.ReadJsonObject)
+        readJsonBtn.setOnClickListener {
+            sendRequestWithJsonHttp()
+        }
+
+
+        val readGsonBtn=findViewById<Button>(R.id.ReadGsonObject)
+        readGsonBtn.setOnClickListener {
+            ReadwithGsonOkhttp()
+        }
     }
+
+
+
+    private fun ReadwithGsonOkhttp(){
+        thread {
+            try{
+                val client= OkHttpClient()
+                val request= Request.Builder()
+                    .url("http://192.168.3.11/get_data.json")
+                    .build()
+                val response=client.newCall(request).execute()
+                val responseData=response.body?.string()
+                if(responseData!=null){
+                    parseJsonwithGSON(responseData)
+                }
+            }
+            catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
+    }
+
+
+    private fun parseJsonwithGSON(jsonData: String){
+        val gson= Gson()
+        val typeOf=object:TypeToken<List<App>>(){}.type
+        val appList=gson.fromJson<List<App>>(jsonData, typeOf)
+        for(app in appList){
+            Log.d("MainActivity","id is ${app.id}")
+            Log.d("MainActivity","name is ${app.name}")
+            Log.d("MainActivity","version is ${app.version}")
+        }
+
+    }
+
+    private fun sendRequestWithJsonHttp(){
+        thread {
+            try {
+                val client= OkHttpClient()
+                val request= Request.Builder()
+                    .url("http://192.168.3.11/get_data.json")
+                    .build()
+                val response=client.newCall(request).execute()
+                val responseData=response.body?.string()
+                if(responseData!=null){
+                    parseJSONWithJSONObject(responseData)
+                }
+            }
+            catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
+    }
+
+
+    private fun parseJSONWithJSONObject(jsonData: String){
+        try{
+            val jsonArray= JSONArray(jsonData)
+            for(i in 0 until jsonArray.length()){
+                val jsonObject=jsonArray.getJSONObject(i)
+                val id=jsonObject.getString("id")
+                val name=jsonObject.getString("name")
+                val version=jsonObject.getString("version")
+                Log.d("MainActivity","id is $id")
+                Log.d("MainActivity","name is $name")
+                Log.d("MainActivity","version is $version")
+            }
+        }
+        catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
 
     private fun sendRequestWithOkHttp(){
         thread{
